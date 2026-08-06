@@ -1,19 +1,23 @@
 name: vita-dev
 
 on:
-  #push:
-  #  branches: [ dev ]
   workflow_dispatch:
 
 jobs:
-
   build-vita-dev:
     runs-on: ubuntu-24.04
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           submodules: recursive
+          fetch-depth: 0
+
+      - name: Force update submodules
+        run: |
+          git submodule sync --recursive
+          git submodule update --init --recursive --force
 
       - name: Install build dependencies
         run: |
@@ -33,6 +37,7 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE
           export VITASDK=/usr/local/vitasdk
+          export PATH=$VITASDK/bin:$PATH
           mkdir cmake-build && cd cmake-build
           cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug .. \
             -DPLATFORM_VITA=ON -DOPTION_MPV_PLAYER=OFF
@@ -40,25 +45,41 @@ jobs:
       - name: Build pfbneo
         run: |
           cd $GITHUB_WORKSPACE/cmake-build
+          export VITASDK=/usr/local/vitasdk
+          export PATH=$VITASDK/bin:$PATH
           make pfbneo.deps
           make -j"$(nproc)" pfbneo.vpk
 
       - name: Build pgen
         run: |
           cd $GITHUB_WORKSPACE/cmake-build
+          export VITASDK=/usr/local/vitasdk
+          export PATH=$VITASDK/bin:$PATH
           make -j"$(nproc)" pgen.vpk
 
       - name: Build pnes
         run: |
           cd $GITHUB_WORKSPACE/cmake-build
+          export VITASDK=/usr/local/vitasdk
+          export PATH=$VITASDK/bin:$PATH
           make -j"$(nproc)" pnes.vpk
 
       - name: Build psnes
         run: |
           cd $GITHUB_WORKSPACE/cmake-build
+          export VITASDK=/usr/local/vitasdk
+          export PATH=$VITASDK/bin:$PATH
           make -j"$(nproc)" psnes.vpk
 
       - name: Build pgba
         run: |
           cd $GITHUB_WORKSPACE/cmake-build
+          export VITASDK=/usr/local/vitasdk
+          export PATH=$VITASDK/bin:$PATH
           make -j"$(nproc)" pgba.vpk
+
+      - name: Upload VPK Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: vita-vpk-builds
+          path: cmake-build/*.vpk
