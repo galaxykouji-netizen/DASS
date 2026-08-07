@@ -19,3 +19,21 @@
 [submodule "external/cores/mgba"]
 	path = external/cores/mgba
 	url = https://github.com/mgba-emu/mgba.git
+[submodule "external/sscrap"]
+	path = external/sscrap
+	url = https://github.com/Cpasjuste/sscrap.git
+[submodule "external/libcross2d"]
+	path = external/libcross2d
+	url = https://github.com/Cpasjuste/libcross2d.git
+[submodule "external/cores/snes9x"]
+	path = external/cores/snes9x
+	url = https://github.com/Cpasjuste/snes9x.git
+[submodule "external/cores/nestopia"]
+	path = external/cores/nestopia
+	url = https://github.com/Cpasjuste/nestopia.git
+[submodule "external/cores/FBNeo"]
+	path = external/cores/FBNeo
+	url = https://github.com/finalburnneo/FBNeo.git
+[submodule "external/cores/Genesis-Plus-GX"]
+	path = external/cores/Genesis-Plus-GX
+	url = https://github.com/ekeeke/Genesis-Plus-GX.git
